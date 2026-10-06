@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chatbot popout demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="chatbot.css">
+<style>
+  body { margin: 0; font-family: "Public Sans", system-ui, sans-serif; color: #0b1f3f; background: #ffffff; }
+  header { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; padding: 20px 32px; border-bottom: 1px solid #c9d3e3; font-weight: 600; }
+  nav { display: flex; gap: 24px; font-size: 13px; color: #55627a; }
+  main { max-width: 1040px; margin: 0 auto; padding: 56px 32px; }
+  h1 { font-size: 28px; line-height: 34px; letter-spacing: -0.01em; margin: 0 0 16px; }
+  p { font-size: 15px; line-height: 22px; color: #55627a; max-width: 520px; }
+</style>
+</head>
+<body>
+<header><span>[YOUR WEBSITE]</span><nav><span>[Nav link]</span><span>[Nav link]</span><span>[Nav link]</span></nav></header>
+<main>
+  <h1>[Your page headline]</h1>
+  <p>[Your page content sits here. The chat assistant floats over it in the bottom-right corner.]</p>
+</main>
+<script src="chatbot.js"></script>
+<script>
+  ChatbotPopout.init({
+    title: '[Assistant name]',
+    startOpen: true,
+    note: 'Prototype: replies are placeholders until a model is connected.'
+    // onMessage: async (text, history) => { const r = await fetch('/api/chat', {...}); return (await r.json()).reply; }
+  });
+</script>
+</body>
+</html>
