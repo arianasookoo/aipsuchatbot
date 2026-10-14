@@ -58,8 +58,9 @@ Rules:
 1. Use ONLY the numbered evidence passages below. Do not use outside knowledge.
 2. Every sentence must end with a citation like [2] naming the passage that supports it. A sentence may cite more than one passage: [1][3].
 3. Name specific pages, programs, offices, and contacts from the evidence when they exist.
-4. If the evidence does not contain the answer, reply with exactly {REFUSAL} and nothing else.
-5. Answer in at most 5 sentences. No preamble."""
+4. If the evidence does not directly answer the question asked, reply with exactly {REFUSAL} and nothing else. Never answer a different question than the one asked, and never write a sentence saying the evidence lacks something.
+5. Answer in at most 5 sentences. No preamble.
+6. Your first line must be exactly ANSWERABLE or {REFUSAL}, on its own line, before anything else. If the question is outside the evidence, there is nothing else."""
 
 
 def build_prompt(question, evidence):
@@ -84,7 +85,8 @@ def answer(question, db=Path("vector_db"), top_k=TOP_K, llm=chat, retriever=retr
     with _llm_slots:
         reply = llm([{"role": "system", "content": SYSTEM},
                      {"role": "user", "content": build_prompt(question, evidence)}])
-    cited_text = "" if reply.startswith(REFUSAL) else keep_cited(reply, len(evidence))
+    reply = re.sub(r"^\s*ANSWERABLE\s*", "", reply)  # decision line, see SYSTEM rule 6
+    cited_text = "" if REFUSAL in reply[:40] else keep_cited(reply, len(evidence))
     used = sorted({int(c) for c in re.findall(r"\[(\d+)\]", cited_text)})
     citations = [{"n": i, "title": evidence[i - 1]["title"], "url": evidence[i - 1]["sources"][0]["url"]}
                  for i in used]
@@ -120,8 +122,8 @@ def _selfcheck():
     assert keep_cited("Made up fact [7].", 2) == ""
     fake_ev = [{"title": "T", "sources": [{"url": "https://x.psu.edu/a"}], "text": "t", "keyword_rank": 1}]
     fake_ret = lambda q, db, k: fake_ev
-    out = answer("q", llm=lambda m: "Yes [1].", retriever=fake_ret)
-    assert out["citations"][0]["url"] == "https://x.psu.edu/a" and not out["refused"]
+    out = answer("q", llm=lambda m: "ANSWERABLE\nYes [1].", retriever=fake_ret)
+    assert out["answer"] == "Yes [1]." and out["citations"][0]["url"] == "https://x.psu.edu/a" and not out["refused"]
     out = answer("q", llm=lambda m: REFUSAL, retriever=fake_ret)
     assert out["refused"] and out["fallback"]["url"] == "https://x.psu.edu/a"
     print("selfcheck ok")
