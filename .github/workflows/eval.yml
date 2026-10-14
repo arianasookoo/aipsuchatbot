@@ -1,0 +1,20 @@
+# Re-runs the retrieval evaluation on every push and pull request.
+# Fails the check if hit@3 drops below the 85% requirement (R4).
+# No API key needed: retrieval is fully local (chromadb + MiniLM via onnxruntime).
+name: retrieval-eval
+on: [push, pull_request]
+jobs:
+  eval:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python -m pip install chromadb==1.5.9
+      - run: python vector_search.py index chunks.json
+      - run: python eval/run_eval.py --min-hit3 0.85
+      - uses: actions/upload-artifact@v4
+        with:
+          name: eval-results
+          path: eval/results.csv
