@@ -95,9 +95,11 @@ def answer(question, db=Path("vector_db"), top_k=TOP_K, llm=chat, retriever=retr
            "evidence": [{"n": i, "title": e["title"], "url": e["sources"][0]["url"], "text": e["text"]}
                         for i, e in enumerate(evidence, 1)]}
     if refused:
-        # Hand off to the top page only if it shares words with the question;
-        # otherwise point at the general contact page instead of a random hit.
-        top = evidence[0] if evidence and evidence[0].get("keyword_rank") else None
+        # Hand off to the top page only when keyword and vector search agree it is
+        # close (both rank <= 3). A keyword-only hit sends "football tickets" to the
+        # internships page (measured 2026-10-14); then the contact page is the safer handoff.
+        top = evidence[0] if evidence and all(
+            (evidence[0].get(k) or 99) <= 3 for k in ("keyword_rank", "vector_rank")) else None
         out["fallback"] = ({"title": top["title"], "url": top["sources"][0]["url"]} if top
                            else {"title": "Connect with Career Resources & Employer Relations",
                                  "url": "https://career.engr.psu.edu/connect.aspx"})
@@ -120,12 +122,15 @@ def _selfcheck():
     assert keep_cited("Post jobs on Nittany Lion Careers [1]. I think so. Fees apply [2][1].", 2) == \
         "Post jobs on Nittany Lion Careers [1]. Fees apply [2][1]."
     assert keep_cited("Made up fact [7].", 2) == ""
-    fake_ev = [{"title": "T", "sources": [{"url": "https://x.psu.edu/a"}], "text": "t", "keyword_rank": 1}]
+    fake_ev = [{"title": "T", "sources": [{"url": "https://x.psu.edu/a"}], "text": "t", "keyword_rank": 1, "vector_rank": 2}]
     fake_ret = lambda q, db, k: fake_ev
     out = answer("q", llm=lambda m: "ANSWERABLE\nYes [1].", retriever=fake_ret)
     assert out["answer"] == "Yes [1]." and out["citations"][0]["url"] == "https://x.psu.edu/a" and not out["refused"]
     out = answer("q", llm=lambda m: REFUSAL, retriever=fake_ret)
     assert out["refused"] and out["fallback"]["url"] == "https://x.psu.edu/a"
+    weak = [{**fake_ev[0], "vector_rank": 20}]  # keyword-only hit: hand off to the contact page instead
+    out = answer("q", llm=lambda m: REFUSAL, retriever=lambda q, db, k: weak)
+    assert out["fallback"]["url"].endswith("/connect.aspx")
     print("selfcheck ok")
 
 
