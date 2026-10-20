@@ -65,31 +65,125 @@ Neither MiniLM nor Chroma writes chatbot answers. A later answer-generation serv
 | `chunks.json` | Generated chunks with text, IDs, hashes, word positions, titles, URLs, and source provenance. |
 | `vector_search.py` | Splits chunks to fit MiniLM, creates embeddings, builds a persistent Chroma collection, and performs semantic search. |
 | `hybrid_search.py` | Combines semantic results with keyword relevance and returns one ranked passage per matching document. |
+| `Dockerfile` | Builds a ready-to-run terminal search image, including the local vector index. |
+| `.dockerignore` | Keeps local environments, databases, credentials, and Git files out of the Docker image. |
 | `chatbot.js` | Dependency-free popout chat widget. It can call a future backend through its `onMessage` option. |
 | `chatbot.css` | Chat widget styles. |
 | `index.html` | Demonstration page for the chat widget. |
 
-## Requirements
+## Quick start with Docker
 
-- Python 3.9 or newer
-- Internet access on the first indexing run so the MiniLM model can be downloaded
-- `chromadb==1.5.9`
+Docker is the simplest way to run the current terminal search. It installs the
+Python dependencies, downloads the MiniLM model, and builds the Chroma index
+inside the image.
 
-No API key is required for the current cleaning, indexing, or retrieval pipeline.
+### 1. Install Docker Desktop
 
-## Local setup
+Install [Docker Desktop](https://www.docker.com/products/docker-desktop/) and
+start it. Wait until Docker reports that it is running.
 
-Pull the latest changes:
+Verify the installation in a new terminal window:
 
 ```bash
+docker --version
+docker info
+```
+
+The first build needs an internet connection and several gigabytes of free disk
+space. No API key is required.
+
+### 2. Get the project ready
+
+For a new checkout, clone the repository and enter it:
+
+```bash
+git clone https://github.com/arianasookoo/aipsuchatbot.git
+cd aipsuchatbot
+```
+
+If the repository is already on your computer, enter it and pull the latest changes:
+
+```bash
+cd aipsuchatbot
 git pull
 ```
+
+The cleaned pages and `chunks.json` are already committed. You do not need to
+run the web scraper or data-cleaning scripts before building the image.
+
+### 3. Build the image
+
+```bash
+docker build -t aipsu-chatbot .
+```
+
+The first build takes longer because Docker installs Chroma, downloads MiniLM,
+and creates the vector index. Later builds can reuse cached layers when the
+dependencies have not changed.
+
+### 4. Search from the terminal
+
+Pass one question to the container:
+
+```bash
+docker run --rm aipsu-chatbot "How can my company sponsor a capstone project?"
+```
+
+Other examples:
+
+```bash
+docker run --rm aipsu-chatbot "How can an employer post jobs for engineering students?"
+docker run --rm aipsu-chatbot "Who do I contact about a research partnership?"
+```
+
+Return only three source pages:
+
+```bash
+docker run --rm aipsu-chatbot --top-k 3 "How can my company sponsor a capstone project?"
+```
+
+Return structured JSON:
+
+```bash
+docker run --rm aipsu-chatbot --json "How can my company sponsor a capstone project?"
+```
+
+Each run prints ranked evidence passages and their official source URLs. It does
+not yet generate a conversational answer.
+
+### 5. Rebuild after changes
+
+Rebuild the image after changing the code or `chunks.json`:
+
+```bash
+docker build -t aipsu-chatbot .
+```
+
+### Docker troubleshooting
+
+- `zsh: command not found: docker`: install Docker Desktop, then open a new terminal.
+- `failed to connect to the docker API`: start or restart Docker Desktop and wait for it to finish loading.
+- `Input/output error` during installation: free disk space, restart Docker Desktop, and retry the build.
+
+## Run without Docker (optional)
+
+Requirements:
+
+- Python 3.9 or newer
+- Internet access on the first indexing run
+- `chromadb==1.5.9`
 
 Create and activate a virtual environment:
 
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
+```
+
+On Windows, activate it with:
+
+```powershell
+.venv\Scripts\activate
 ```
 
 Install the vector database dependency:
@@ -102,7 +196,14 @@ The embedding model downloads automatically during the first indexing run.
 
 ## Build the local retrieval pipeline
 
-Run these commands from the repository root:
+The committed `chunks.json` is ready to index. Run this command from the
+repository root:
+
+```bash
+python vector_search.py index chunks.json
+```
+
+Only regenerate the cleaned data and chunks after changing the source scrape:
 
 ```bash
 python clean_scrape.py multi_seed_scrape_data.json
@@ -199,7 +300,7 @@ The job-posting and capstone tests rank the expected pages first. The research t
 5. Add grounded answer generation using a model such as Qwen3-8B. Supply only retrieved evidence, require official-source citations, and explicitly decline unsupported questions.
 6. Expose retrieval and answer generation through a backend API.
 7. Connect the backend to the existing chat widget.
-8. Add Docker deployment, refresh, recovery, and operating documentation.
+8. Expand the Docker workflow for the future backend, data refresh, recovery, and production deployment.
 
 ## Generated and sensitive files
 
