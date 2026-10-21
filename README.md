@@ -212,3 +212,12 @@ Do not commit local environments, generated databases, or credentials. The repos
 - `*.pyc`
 
 Store future API keys only in `.env` or another approved secret-management system. Never place keys directly in source code or commit them to Git.
+
+## Tests
+
+Offline unit tests (no network, no API key, no `vector_db` needed):
+
+```
+.venv\Scripts\python.exe -m pip install -r requirements-dev.txt
+.venv\Scripts\python.exe -m pytest -q
+```
