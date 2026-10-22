@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # One-time setup on macOS / Linux: venv, deps, index, model choice, .env. Safe to re-run.
-# Usage (from the repo folder):  bash setup.sh
+# Usage (from the repo folder):  bash setup.sh            # picks a model by hardware
+#                                 bash setup.sh gemma3:27b  # or name the Ollama model yourself (GB10 / big GPU)
 set -e
 cd "$(dirname "$0")"
 
@@ -18,7 +19,7 @@ if [ "$(uname -s)" = Darwin ] && [ "$(uname -m)" = arm64 ] && [ "$(sysctl -n hw.
 
 if command -v ollama >/dev/null 2>&1; then
   if ! grep -q '^NAVIGATOR_LLM_MODEL=' .env; then
-    if [ $has_gpu = 1 ]; then model=gemma3:12b; else model=gemma3:4b; fi
+    if [ -n "$1" ]; then model=$1; elif [ $has_gpu = 1 ]; then model=gemma3:12b; else model=gemma3:4b; fi
     echo "Ollama found. Pulling $model (gpu-class machine: $has_gpu)..."
     ollama pull "$model"
     printf '\nNAVIGATOR_LLM_BASE=http://127.0.0.1:11434/v1\nNAVIGATOR_LLM_KEY=ollama\nNAVIGATOR_LLM_MODEL=%s\n' "$model" >> .env

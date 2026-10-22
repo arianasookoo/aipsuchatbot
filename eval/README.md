@@ -29,6 +29,22 @@ All scripts run from the repo root with the index built (`python vector_search.p
 | `load_test.py` | N concurrent users against a running `serve.py`; p50/p95/max. |
 | `answers_local.jsonl`, `claims_local.csv` | The same two outputs produced with the local gemma3:12b model, kept separately so both rows above are reproducible. |
 
+## On the sponsor's GB10 (DGX Spark): the four commands that close the latency row
+
+The box has 128 GB of unified memory, so it can hold a model 3-6x larger than the laptop's and answer several users at once. Same code, different `.env`.
+
+```
+git clone https://github.com/arianasookoo/aipsuchatbot && cd aipsuchatbot
+git checkout advait/eval-answer-service
+bash setup.sh gemma3:27b                     # or qwen3:32b, llama3.3:70b; needs Ollama installed on the box
+OLLAMA_NUM_PARALLEL=8 ollama serve &         # lets Ollama batch requests; the laptop could not afford this at 16 GB
+.venv/bin/python serve.py --host 0.0.0.0 &   # --host so other machines on the network can reach it
+.venv/bin/python eval/load_test.py --users 10      # p50 / p95 at 10 users: the number the requirement asks for
+.venv/bin/python eval/run_answers.py && .venv/bin/python eval/claims.py   # R14 + refusals for that model
+```
+
+Record the result as a new row in the table above with the model name and date. Try models in this order and stop at the first that passes p95 ≤ 5 s with R14 ≥ 95%: `gemma3:27b` (17 GB), `qwen3:32b` (20 GB), `llama3.3:70b` (43 GB). If none passes on latency alone, `OLLAMA_NUM_PARALLEL` is the knob; if none passes on grounding, the prompt is the knob, not the model.
+
 ## How to read the numbers honestly
 
 - Retrieval labels were written by one person (Advait Sadineni) against the 96 scraped pages. The two misses (#18, #26) returned pages a reader might call relevant; the labels were kept strict rather than adjusted to pass.

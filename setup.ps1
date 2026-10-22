@@ -1,6 +1,8 @@
 # One-time setup on Windows: venv, deps, index, model choice, .env. Safe to re-run.
-# Usage (PowerShell, from the repo folder):  .\setup.ps1
+# Usage (PowerShell, from the repo folder):  .\setup.ps1              # picks a model by hardware
+#                                            .\setup.ps1 gemma3:27b   # or name the Ollama model yourself
 # If scripts are blocked:  powershell -ExecutionPolicy Bypass -File .\setup.ps1
+param([string]$Model = "")
 $ErrorActionPreference = "Stop"
 Set-Location $PSScriptRoot
 
@@ -15,7 +17,7 @@ $hasGpu = [bool](Get-Command nvidia-smi -ErrorAction SilentlyContinue)
 $hasOllama = [bool](Get-Command ollama -ErrorAction SilentlyContinue)
 $envText = Get-Content .env -Raw
 if ($hasOllama -and $envText -notmatch "(?m)^NAVIGATOR_LLM_MODEL=") {
-    $model = if ($hasGpu) { "gemma3:12b" } else { "gemma3:4b" }
+    $model = if ($Model) { $Model } elseif ($hasGpu) { "gemma3:12b" } else { "gemma3:4b" }
     Write-Host "Ollama found. Pulling $model (GPU: $hasGpu)..."
     ollama pull $model
     Add-Content .env "`nNAVIGATOR_LLM_BASE=http://127.0.0.1:11434/v1`nNAVIGATOR_LLM_KEY=ollama`nNAVIGATOR_LLM_MODEL=$model"
