@@ -15,7 +15,7 @@ The repository currently includes:
 - A local Chroma vector database using the `all-MiniLM-L6-v2` embedding model.
 - Additional model-aware splitting that produces 577 indexed passages from the 324 source chunks.
 - Semantic vector search and hybrid keyword/semantic retrieval.
-- A standalone browser chat widget whose responses are still placeholders.
+- A browser chat widget connected to a local retrieval API (`server.py`). Replies are excerpts from the best-matching official page plus source links, not generated answers.
 
 Cleaning reduces the source dataset from 74,524 words to 48,042 words. These figures describe the currently committed generated files.
 
@@ -67,9 +67,10 @@ Neither MiniLM nor Chroma writes chatbot answers. A later answer-generation serv
 | `hybrid_search.py` | Combines semantic results with keyword relevance and returns one ranked passage per matching document. |
 | `Dockerfile` | Builds a ready-to-run terminal search image, including the local vector index. |
 | `.dockerignore` | Keeps local environments, databases, credentials, and Git files out of the Docker image. |
-| `chatbot.js` | Dependency-free popout chat widget. It can call a future backend through its `onMessage` option. |
+| `server.py` | Standard-library web server that hosts the chat page and exposes hybrid search at `POST /api/chat`. |
+| `chatbot.js` | Dependency-free popout chat widget. It calls the backend through its `onMessage` option. |
 | `chatbot.css` | Chat widget styles. |
-| `index.html` | Demonstration page for the chat widget. |
+| `index.html` | Demonstration page with the chat widget wired to `/api/chat`. |
 
 ## Quick start with Docker
 
@@ -151,7 +152,18 @@ docker run --rm aipsu-chatbot --json "How can my company sponsor a capstone proj
 Each run prints ranked evidence passages and their official source URLs. It does
 not yet generate a conversational answer.
 
-### 5. Rebuild after changes
+### 5. Run the chat interface
+
+Start the web server inside the container and publish its port:
+
+```bash
+docker run --rm -p 8000:8000 --entrypoint python aipsu-chatbot server.py --host 0.0.0.0
+```
+
+Open <http://localhost:8000> and ask a question in the chat panel. Press
+`Ctrl+C` to stop the server.
+
+### 6. Rebuild after changes
 
 Rebuild the image after changing the code or `chunks.json`:
 
@@ -249,9 +261,28 @@ python vector_search.py search "How can my company sponsor a capstone project?"
 
 Similarity values are ranking signals, not confidence percentages. Retrieved passages are evidence candidates and must be checked before being used to support an answer.
 
-## Chat widget
+## Chat interface
 
-Open `index.html` in a browser to view the current interface prototype. The widget exposes `window.ChatbotPopout`:
+Start the backend after building `vector_db/`:
+
+```bash
+python server.py
+```
+
+Then open <http://127.0.0.1:8000>. Opening `index.html` directly from disk shows the
+widget, but it cannot reach the backend. Options: `--port`, `--host`, `--db`, and
+`--top-k` (number of source pages per reply, default 3).
+
+The server loads MiniLM once at startup and exposes:
+
+- `GET /api/health` returns `{"status": "ok"}`.
+- `POST /api/chat` with `{"message": "How can my company sponsor a capstone project?"}`
+  returns `reply` (an excerpt from the best-ranked page), `sources` (`title` and
+  `url` for each page) and `passages` (the full ranked evidence). Invalid or overlong
+  questions return status 400 with an `error` message.
+
+The widget exposes `window.ChatbotPopout`. `onMessage` may return a string or
+`{ text, sources }`; sources are shown as links under the reply:
 
 ```html
 <link rel="stylesheet" href="chatbot.css">
@@ -260,7 +291,11 @@ Open `index.html` in a browser to view the current interface prototype. The widg
   ChatbotPopout.init({
     title: "Assistant",
     onMessage: async (text, history) => {
-      // Call the future retrieval and answer backend here.
+      const r = await fetch("/api/chat", { method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: text }) });
+      const data = await r.json();
+      return r.ok ? { text: data.reply, sources: data.sources } : data.error;
     }
   });
 </script>
@@ -288,8 +323,8 @@ The job-posting and capstone tests rank the expected pages first. The research t
 - Document IDs are content-derived, so changing a page's content changes its document ID.
 - The local Chroma index is rebuilt rather than incrementally updated.
 - There is not yet a 30-question labeled retrieval evaluation set.
-- There is no answer-generation service, retrieval API, or end-to-end backend.
-- The chat interface still uses placeholder behavior.
+- There is no answer-generation service. Chat replies are retrieved excerpts, which can start or end mid-sentence.
+- `server.py` is a development server with no authentication or rate limiting. Do not expose it publicly as is.
 
 ## Suggested next work
 
@@ -298,9 +333,8 @@ The job-posting and capstone tests rank the expected pages first. The research t
 3. Add the remaining source and operational metadata fields.
 4. Build a labeled retrieval evaluation set with expected pages and required facts, including questions the indexed sources cannot answer.
 5. Add grounded answer generation using a model such as Qwen3-8B. Supply only retrieved evidence, require official-source citations, and explicitly decline unsupported questions.
-6. Expose retrieval and answer generation through a backend API.
-7. Connect the backend to the existing chat widget.
-8. Expand the Docker workflow for the future backend, data refresh, recovery, and production deployment.
+6. Add answer generation to the `/api/chat` endpoint in `server.py`.
+7. Expand the Docker workflow for the future backend, data refresh, recovery, and production deployment.
 
 ## Generated and sensitive files
 

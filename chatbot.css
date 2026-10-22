@@ -190,6 +190,30 @@
   border-radius: var(--radius-md) var(--radius-md) var(--radius-sm)
     var(--radius-md);
 }
+.cb-sources {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--line);
+  white-space: normal;
+}
+.cb-sources-label {
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 700;
+  color: var(--muted);
+}
+.cb-source {
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--navy-500);
+  text-decoration: underline;
+}
+.cb-source:hover {
+  color: var(--navy-900);
+}
 .cb-typing {
   color: var(--muted);
   font-size: 13px;

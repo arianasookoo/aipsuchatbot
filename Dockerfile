@@ -11,4 +11,7 @@ COPY . .
 
 RUN python vector_search.py index chunks.json
 
+# Chat server: docker run -p 8000:8000 --entrypoint python <image> server.py --host 0.0.0.0
+EXPOSE 8000
+
 ENTRYPOINT ["python", "hybrid_search.py"]

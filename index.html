@@ -25,10 +25,28 @@
 <script src="chatbot.js"></script>
 <script>
   ChatbotPopout.init({
-    title: '[Assistant name]',
+    title: 'Engineering Engagement Navigator',
     startOpen: true,
-    note: 'Prototype: replies are placeholders until a model is connected.'
-    // onMessage: async (text, history) => { const r = await fetch('/api/chat', {...}); return (await r.json()).reply; }
+    greeting: 'Hi! Ask me how your organization can work with Penn State Engineering: recruiting, capstone sponsorship, research partnerships and more.',
+    suggestions: [
+      'How can my company sponsor a capstone project?',
+      'How can an employer post jobs for engineering students?',
+      'Who do I contact about a research partnership?'
+    ],
+    note: 'Prototype: replies are excerpts from official Penn State pages, not generated answers.',
+    onMessage: async (text) => {
+      if (location.protocol === 'file:') {
+        return 'The search backend is not connected. Start it with "python server.py" and open http://127.0.0.1:8000.';
+      }
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: text })
+      });
+      const data = await response.json();
+      if (!response.ok) return data.error || 'Sorry, I could not get an answer just now. Please try again.';
+      return { text: data.reply, sources: data.sources };
+    }
   });
 </script>
 </body>

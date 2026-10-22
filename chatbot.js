@@ -3,7 +3,9 @@
  *   <script src="chatbot.js"></script>
  *   <script>ChatbotPopout.init({ title: 'Assistant', onMessage: async (text, history) => 'reply' });</script>
  * onMessage receives the visitor's text and the message history and returns
- * (or resolves to) the assistant's reply. Without it, a placeholder reply is shown.
+ * (or resolves to) the assistant's reply: a string, or { text, sources } where
+ * sources is a list of { title, url } shown as links. Without it, a placeholder
+ * reply is shown.
  */
 (function (global) {
   'use strict';
@@ -86,9 +88,21 @@
 
     var chips = null;
     function scrollDown() { log.scrollTop = log.scrollHeight; }
-    function addMessage(from, text) {
+    function addMessage(from, text, sources) {
       history.push({ from: from, text: text });
-      log.appendChild(el('div', 'cb-msg cb-msg-' + from, text));
+      var msg = el('div', 'cb-msg cb-msg-' + from, text);
+      var links = (sources || []).filter(function (s) { return s && /^https?:\/\//i.test(s.url); });
+      if (links.length) {
+        var list = el('div', 'cb-sources');
+        list.appendChild(el('div', 'cb-sources-label', 'Sources'));
+        links.forEach(function (s) {
+          var a = el('a', 'cb-source', s.title || s.url);
+          a.href = s.url; a.target = '_blank'; a.rel = 'noopener noreferrer';
+          list.appendChild(a);
+        });
+        msg.appendChild(list);
+      }
+      log.appendChild(msg);
       scrollDown();
     }
     function setOpen(open) {
@@ -114,7 +128,8 @@
           });
       reply.then(function (answer) {
         typing.remove();
-        addMessage('bot', String(answer));
+        if (answer && typeof answer === 'object') addMessage('bot', String(answer.text || ''), answer.sources);
+        else addMessage('bot', String(answer));
       }).catch(function () {
         typing.remove();
         addMessage('bot', 'Sorry, I could not get an answer just now. Please try again.');
