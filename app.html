@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Penn State Engineering Engagement Navigator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,600&display=swap">
+<style>
+/* Full-page front end for the Navigator. Talks to POST /ask from serve.py.
+   Tokens mirror chatbot.css so the widget and this page read as one product. */
+:root {
+  --navy-900: #0b1f3f; --navy-700: #14315f; --navy-500: #2a4d8f; --navy-100: #e3e9f4; --navy-050: #f3f6fb;
+  --white: #ffffff; --ink: #0b1f3f; --muted: #55627a; --line: #c9d3e3; --line-soft: #e4e9f2;
+  --ok: #1d6b4a; --ok-soft: #e4f3ec; --warn: #8a5a12; --warn-soft: #fdf3e1;
+  --radius: 14px; --radius-sm: 8px;
+  --serif: "Source Serif 4", Georgia, serif;
+  --sans: "Public Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body { margin: 0; font-family: var(--sans); color: var(--ink); background: var(--navy-050); display: flex; flex-direction: column; }
+a { color: var(--navy-500); }
+
+/* top bar */
+.top { background: var(--navy-900); color: var(--white); padding: 14px 24px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.top .mark { width: 34px; height: 34px; border-radius: 50%; background: var(--white); color: var(--navy-900); display: grid; place-items: center; font-weight: 700; font-family: var(--serif); font-size: 17px; }
+.top .name { font-weight: 600; font-size: 16px; line-height: 1.2; }
+.top .name small { display: block; font-weight: 400; font-size: 12.5px; opacity: .8; }
+.top .right { margin-left: auto; display: flex; gap: 8px; align-items: center; font-size: 12.5px; opacity: .9; }
+.top .dot { width: 8px; height: 8px; border-radius: 50%; background: #7bd3a3; display: inline-block; margin-right: 6px; }
+.top .dot.off { background: #e39a9a; }
+
+/* layout */
+.shell { flex: 1; display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 0; max-width: 1180px; width: 100%; margin: 0 auto; min-height: 0; }
+.main { display: flex; flex-direction: column; min-width: 0; min-height: 0; }
+.side { border-left: 1px solid var(--line-soft); background: var(--white); padding: 22px 20px; font-size: 14px; color: var(--muted); overflow-y: auto; }
+.side h3 { font-family: var(--serif); font-size: 17px; color: var(--ink); margin: 0 0 8px; }
+.side p { margin: 0 0 12px; line-height: 1.5; }
+.side .step { display: grid; grid-template-columns: 22px 1fr; gap: 8px; margin-bottom: 10px; }
+.side .step b { color: var(--navy-500); font-family: var(--serif); }
+.side .num { display: flex; justify-content: space-between; border-top: 1px solid var(--line-soft); padding: 8px 0; }
+.side .num span:last-child { font-weight: 600; color: var(--ink); font-variant-numeric: tabular-nums; }
+@media (max-width: 880px) { .shell { grid-template-columns: 1fr; } .side { display: none; } }
+
+/* thread */
+.thread { flex: 1; overflow-y: auto; padding: 28px 24px 12px; display: flex; flex-direction: column; gap: 18px; min-height: 0; }
+.empty { margin: auto 0; text-align: left; max-width: 640px; }
+.empty h1 { font-family: var(--serif); font-size: clamp(26px, 4vw, 36px); font-weight: 600; margin: 0 0 10px; line-height: 1.15; }
+.empty p { color: var(--muted); font-size: 16px; margin: 0 0 20px; line-height: 1.5; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { font: inherit; font-size: 14px; border: 1px solid var(--line); background: var(--white); color: var(--ink); border-radius: 999px; padding: 8px 14px; cursor: pointer; text-align: left; }
+.chip:hover, .chip:focus-visible { border-color: var(--navy-500); color: var(--navy-500); outline: none; }
+.chip small { display: block; font-size: 11.5px; color: var(--muted); letter-spacing: .04em; text-transform: uppercase; margin-bottom: 1px; }
+
+.msg { max-width: 760px; }
+.msg.user { align-self: flex-end; background: var(--navy-700); color: var(--white); padding: 12px 16px; border-radius: var(--radius); border-bottom-right-radius: 4px; font-size: 15.5px; line-height: 1.45; max-width: 70%; }
+.msg.bot { align-self: flex-start; width: 100%; }
+.card { background: var(--white); border: 1px solid var(--line-soft); border-radius: var(--radius); padding: 18px 20px; }
+.card .meta { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; font-size: 12.5px; color: var(--muted); margin-bottom: 10px; }
+.badge { display: inline-flex; align-items: center; gap: 6px; border-radius: 999px; padding: 3px 10px; font-weight: 600; font-size: 12px; }
+.badge.ok { background: var(--ok-soft); color: var(--ok); }
+.badge.warn { background: var(--warn-soft); color: var(--warn); }
+.answer { font-size: 16px; line-height: 1.6; }
+.answer sup { font-size: 11px; vertical-align: super; margin-left: 1px; }
+.answer sup a { text-decoration: none; background: var(--navy-100); color: var(--navy-700); border-radius: 4px; padding: 0 5px; font-weight: 600; }
+.answer sup a:hover { background: var(--navy-500); color: var(--white); }
+.sources { margin-top: 14px; border-top: 1px solid var(--line-soft); padding-top: 12px; }
+.sources .h { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+.sources .h button { font: inherit; font-size: 12px; letter-spacing: 0; text-transform: none; background: none; border: 1px solid var(--line); border-radius: 999px; padding: 3px 10px; color: var(--navy-500); cursor: pointer; }
+.src { display: grid; grid-template-columns: 28px 1fr; gap: 10px; padding: 8px 6px; border-radius: var(--radius-sm); }
+.src.hit { background: var(--navy-050); }
+.src .n { width: 24px; height: 24px; border-radius: 6px; background: var(--navy-100); color: var(--navy-700); font-weight: 600; font-size: 12px; display: grid; place-items: center; }
+.src .t { font-weight: 600; font-size: 14.5px; }
+.src .t a { color: var(--ink); text-decoration: none; }
+.src .t a:hover { text-decoration: underline; }
+.src .u { font-size: 12.5px; color: var(--muted); word-break: break-all; }
+.src .ev { display: none; margin-top: 6px; font-size: 13.5px; color: var(--muted); line-height: 1.5; border-left: 3px solid var(--navy-100); padding-left: 10px; }
+.card.show-ev .src .ev { display: block; }
+.refusal { border-left: 4px solid var(--warn); }
+.refusal .answer { color: var(--ink); }
+.handoff { margin-top: 12px; background: var(--navy-050); border-radius: var(--radius-sm); padding: 10px 12px; font-size: 14px; }
+.handoff a { font-weight: 600; }
+.thinking { color: var(--muted); font-size: 14px; display: flex; gap: 8px; align-items: center; }
+.thinking i { width: 8px; height: 8px; border-radius: 50%; background: var(--navy-500); animation: pulse 1s infinite ease-in-out; }
+@keyframes pulse { 0%, 100% { opacity: .25 } 50% { opacity: 1 } }
+@media (prefers-reduced-motion: reduce) { .thinking i { animation: none; } }
+
+/* composer */
+.composer { padding: 12px 24px 18px; background: linear-gradient(to top, var(--navy-050) 70%, transparent); }
+.composer form { display: flex; gap: 10px; max-width: 760px; }
+.composer input { flex: 1; font: inherit; font-size: 16px; padding: 13px 16px; border: 1px solid var(--line); border-radius: 999px; background: var(--white); color: var(--ink); min-width: 0; }
+.composer input:focus { outline: 2px solid var(--navy-500); outline-offset: 1px; }
+.composer button { font: inherit; font-weight: 600; background: var(--navy-900); color: var(--white); border: 0; border-radius: 999px; padding: 0 20px; cursor: pointer; }
+.composer button:disabled { opacity: .5; cursor: default; }
+.composer .note { font-size: 12px; color: var(--muted); margin-top: 8px; }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="mark">N</div>
+  <div class="name">Engineering Engagement Navigator<small>Penn State College of Engineering · for employers, partners, and sponsors</small></div>
+  <div class="right"><span id="status"><span class="dot"></span>Answers cite official pages only</span></div>
+</header>
+
+<div class="shell">
+  <section class="main">
+    <div class="thread" id="thread">
+      <div class="empty" id="empty">
+        <h1>How can your organization work with Penn State Engineering?</h1>
+        <p>Ask in plain language. Every sentence in an answer is tied to an official College of Engineering page, and the sources are listed under it. If the official pages don't cover your question, the Navigator says so and points you to the right office instead of guessing.</p>
+        <div class="chips" id="chips"></div>
+      </div>
+    </div>
+    <div class="composer">
+      <form id="form" autocomplete="off">
+        <input id="q" type="text" placeholder="Ask about recruiting, research, capstone sponsorship, giving…" maxlength="500" aria-label="Your question">
+        <button id="send" type="submit">Ask</button>
+      </form>
+      <div class="note">Prototype. Answers are limited to the public pages that have been indexed, and are not a substitute for contacting the office directly.</div>
+    </div>
+  </section>
+
+  <aside class="side">
+    <h3>How an answer is checked</h3>
+    <div class="step"><b>1</b><span>Your question is matched against indexed College of Engineering pages by both keywords and meaning.</span></div>
+    <div class="step"><b>2</b><span>The five best passages go to a language model that may only use them, and must cite one after every sentence.</span></div>
+    <div class="step"><b>3</b><span>Any sentence without a citation is removed before you see it.</span></div>
+    <div class="step"><b>4</b><span>If the passages don't answer the question, you get a refusal and the closest official page.</span></div>
+    <h3 style="margin-top:20px">Measured on 40 test questions</h3>
+    <div class="num"><span>Right page in top 3</span><span>94%</span></div>
+    <div class="num"><span>Sentences supported by sources</span><span>98%</span></div>
+    <div class="num"><span>Off-topic questions refused</span><span>5 of 5</span></div>
+    <p style="margin-top:10px;font-size:12.5px">Numbers and scripts in <code>eval/README.md</code>.</p>
+  </aside>
+</div>
+
+<script>
+(function () {
+  var STARTERS = [
+    ['Recruiting', 'How do I post a job for engineering students?'],
+    ['Capstone', 'How can my company sponsor a capstone project?'],
+    ['Research', 'Who do I contact about a research partnership?'],
+    ['Events', 'When are the engineering career fairs?'],
+    ['Student orgs', 'How can we sponsor an engineering student organization?'],
+    ['Giving', 'How can our company make a gift to the College of Engineering?'],
+    ['Employee education', 'Does Penn State offer continuing education for our engineers?']
+  ];
+  var thread = document.getElementById('thread'), empty = document.getElementById('empty');
+  var form = document.getElementById('form'), input = document.getElementById('q'), send = document.getElementById('send');
+  var chips = document.getElementById('chips');
+
+  STARTERS.forEach(function (s) {
+    var b = document.createElement('button'); b.type = 'button'; b.className = 'chip';
+    var small = document.createElement('small'); small.textContent = s[0];
+    b.appendChild(small); b.appendChild(document.createTextNode(s[1]));
+    b.addEventListener('click', function () { ask(s[1]); });
+    chips.appendChild(b);
+  });
+
+  function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+  function host(u) { try { return new URL(u).host.replace(/^www\./, '') + new URL(u).pathname; } catch (e) { return u; } }
+  function scroll() { thread.scrollTop = thread.scrollHeight; }
+
+  // "text [1][3]" -> text nodes + <sup><a href="#src-id">1</a></sup>; never innerHTML on model output
+  function renderAnswer(container, text, id) {
+    var re = /\[(\d+)\]/g, last = 0, m;
+    while ((m = re.exec(text))) {
+      if (m.index > last) container.appendChild(document.createTextNode(text.slice(last, m.index)));
+      var sup = el('sup'), a = el('a', null, m[1]); a.href = '#' + id + '-s' + m[1];
+      a.addEventListener('click', function (n) { return function (e) { e.preventDefault(); flash(id + '-s' + n); }; }(m[1]));
+      sup.appendChild(a); container.appendChild(sup); last = re.lastIndex;
+    }
+    if (last < text.length) container.appendChild(document.createTextNode(text.slice(last)));
+  }
+  function flash(sid) {
+    var s = document.getElementById(sid); if (!s) return;
+    s.scrollIntoView({ block: 'nearest' }); s.classList.add('hit'); setTimeout(function () { s.classList.remove('hit'); }, 1400);
+  }
+
+  var counter = 0;
+  function renderBot(data) {
+    var id = 'a' + (++counter);
+    var wrap = el('div', 'msg bot'), card = el('div', 'card' + (data.refused ? ' refusal' : ''));
+    var meta = el('div', 'meta');
+    if (data.refused) {
+      meta.appendChild(Object.assign(el('span', 'badge warn'), { textContent: 'Not covered by official pages' }));
+    } else {
+      meta.appendChild(Object.assign(el('span', 'badge ok'), { textContent: 'Every sentence cited' }));
+      meta.appendChild(el('span', null, data.citations.length + (data.citations.length === 1 ? ' source' : ' sources')));
+    }
+    if (data.seconds != null) meta.appendChild(el('span', null, data.seconds.toFixed(1) + ' s'));
+    card.appendChild(meta);
+
+    var ans = el('div', 'answer');
+    if (data.refused) {
+      ans.textContent = "I couldn't verify an answer to that from official Penn State Engineering pages.";
+      card.appendChild(ans);
+      if (data.fallback) {
+        var h = el('div', 'handoff'); h.appendChild(document.createTextNode('Closest official page: '));
+        var a = el('a', null, data.fallback.title); a.href = data.fallback.url; a.target = '_blank'; a.rel = 'noopener';
+        h.appendChild(a); card.appendChild(h);
+      }
+    } else {
+      renderAnswer(ans, data.answer, id); card.appendChild(ans);
+      var src = el('div', 'sources'), hd = el('div', 'h');
+      hd.appendChild(el('span', null, 'Sources'));
+      var tog = el('button', null, 'Show passages'); tog.type = 'button';
+      tog.addEventListener('click', function () { var on = card.classList.toggle('show-ev'); tog.textContent = on ? 'Hide passages' : 'Show passages'; });
+      hd.appendChild(tog); src.appendChild(hd);
+      var evidence = {}; (data.evidence || []).forEach(function (e) { evidence[e.n] = e; });
+      data.citations.forEach(function (c) {
+        var row = el('div', 'src'); row.id = id + '-s' + c.n;
+        row.appendChild(el('div', 'n', String(c.n)));
+        var body = el('div'), t = el('div', 't'), a = el('a', null, c.title); a.href = c.url; a.target = '_blank'; a.rel = 'noopener';
+        t.appendChild(a); body.appendChild(t); body.appendChild(el('div', 'u', host(c.url)));
+        if (evidence[c.n]) body.appendChild(el('div', 'ev', evidence[c.n].text));
+        row.appendChild(body); src.appendChild(row);
+      });
+      card.appendChild(src);
+    }
+    wrap.appendChild(card); return wrap;
+  }
+
+  var busy = false;
+  function ask(text) {
+    text = (text || '').trim(); if (!text || busy) return;
+    busy = true; send.disabled = true; input.value = '';
+    if (empty.parentNode) empty.parentNode.removeChild(empty);
+    thread.appendChild(el('div', 'msg user', text));
+    var wait = el('div', 'msg bot'); var tk = el('div', 'thinking'); tk.appendChild(el('i')); tk.appendChild(el('span', null, 'Reading official pages…'));
+    wait.appendChild(tk); thread.appendChild(wait); scroll();
+    fetch('/ask', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ question: text }) })
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        if (data.error && !data.citations) throw new Error(data.error);
+        thread.replaceChild(renderBot(data), wait);
+      })
+      .catch(function (e) {
+        var c = el('div', 'card refusal'); c.appendChild(el('div', 'answer', 'Something went wrong on the server. Try again in a moment.'));
+        wait.replaceChildren(c);
+      })
+      .finally(function () { busy = false; send.disabled = false; input.focus(); scroll(); });
+  }
+  form.addEventListener('submit', function (e) { e.preventDefault(); ask(input.value); });
+  var preset = new URLSearchParams(location.search).get('q');  // app.html?q=... asks on load (deep links, screenshots)
+  if (preset) ask(preset);
+
+  // header status: can the backend be reached?
+  fetch('/demo.html', { method: 'HEAD' }).catch(function () {
+    var s = document.getElementById('status'); s.replaceChildren(); s.appendChild(el('span', 'dot off')); s.appendChild(document.createTextNode('Server not reachable'));
+  });
+})();
+</script>
+</body>
+</html>

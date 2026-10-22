@@ -60,7 +60,7 @@ def main():
     a = p.parse_args()
     warm_up()
     srv = ThreadingHTTPServer(("127.0.0.1", a.port), partial(Handler, directory=str(Path(__file__).parent)))
-    print(f"Navigator demo: http://localhost:{a.port}/demo.html   (Ctrl+C to stop)", flush=True)
+    print(f"Navigator: http://localhost:{a.port}/app.html   (widget version: /demo.html, Ctrl+C to stop)", flush=True)
     srv.serve_forever()
 
 
