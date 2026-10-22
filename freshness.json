@@ -1,0 +1,583 @@
+{
+ "checked_at": "2026-10-22T17:19:55+00:00",
+ "pages": {
+  "http://www.engr.psu.edu/accessibility/": {
+   "sha256": "7e23f7e5eaef58e6ad28586013674e995d12c56e50e377a21c35208c617c3d25",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "changed",
+   "last_changed": "2026-10-22T17:19:35+00:00",
+   "final_url": "https://www.engr.psu.edu/accessibility/"
+  },
+  "https://career.engr.psu.edu/alumni/index.aspx": {
+   "sha256": "804fbbe66022585ba3653fdfb0688c7d25b6c0d259cb4b2d8fc3abe695a69870",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://career.engr.psu.edu/calendar.aspx": {
+   "sha256": "12478e3fbc78f9f3e46bdcaa1907d06f97c518ffab64377c58387b40b736c736",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://career.engr.psu.edu/careerprep/index.aspx": {
+   "sha256": "ed2831c297cd7ad80386528d78a1443dddaf20c76cd5f745a0248b2d11755046",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://career.engr.psu.edu/connect.aspx": {
+   "sha256": "fc5cef0f33f89aa9f92bca19bf256d3a836794e83d4b9533ecf8e676538bf013",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://career.engr.psu.edu/employers/": {
+   "sha256": "2be9dfe282fa3533d43cd52b17942f9348920b3f69fb30e1dd34f5972de897b0",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://career.engr.psu.edu/employers/cpt.aspx": {
+   "sha256": "ca8cab6c6a2e2ba61fe0e7bd9a23828dac8e709966f7802278e1be2c9e87aa27",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "changed",
+   "last_changed": "2026-10-22T17:19:35+00:00",
+   "final_url": "https://career.engr.psu.edu/employers/recruiting/cpt.aspx"
+  },
+  "https://career.engr.psu.edu/employers/engagement-sponsorship.aspx": {
+   "sha256": "c832bb739fa12d075492caf5155d5018db7b99f04ed326c695bab0b8f9684945",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://career.engr.psu.edu/employers/engagement/affiliates.aspx": {
+   "sha256": "fa8552c0e58ab59f7370664b2c81e58c99dea5e917c9bd94a231897e54d75369",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://career.engr.psu.edu/employers/engagement/partners.aspx": {
+   "sha256": "859ccbc45676368517b6b536be47ec3bdbe68dc14a54e4da539a7adb590e56e0",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://career.engr.psu.edu/employers/guidelines.aspx": {
+   "sha256": "7e7bafd51ca7da764ec4d2302a3f70e8ea7cc57e1159ba17c03a4232efc0d0ab",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://career.engr.psu.edu/employers/index.aspx": {
+   "sha256": "2be9dfe282fa3533d43cd52b17942f9348920b3f69fb30e1dd34f5972de897b0",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://career.engr.psu.edu/employers/interviews.aspx": {
+   "sha256": "31cfbf0172046c9ae3067c41d793b68d7fc32f9d6fd4b0fd6623a7bcea84088d",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://career.engr.psu.edu/employers/posting-jobs.aspx": {
+   "sha256": "145929e0f9252f66e20e8a0f1df101e27ce4ecb00b95106523caf62c41fd2df2",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://career.engr.psu.edu/employers/types-of-events.aspx": {
+   "sha256": "5d4acff68b85b3674b8e4cc8f73e2c7a9555dc43bacbf9ef87274eb9acc84a1a",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://career.engr.psu.edu/events/": {
+   "sha256": "704666556a3f298f9d4f4ef759782d94da049e54d9ef29a60c42dbf159bf3688",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://career.engr.psu.edu/events/event-detail.aspx?EventID=510f97ed-47b4-46ac-b790-e": {
+   "sha256": "e73e16bb34163ad49c5583ee0b88858223faab715095dd36fdfa6049d2146abe",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://career.engr.psu.edu/events/event-detail.aspx?EventID=6471c7a0-72f1-42b8-a28d-a": {
+   "sha256": "aa041612610aadadaf3ef41dc8a12674991d2962d34cedf062c56a5b1d73298c",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://career.engr.psu.edu/events/event-detail.aspx?EventID=6d1f3d9c-9c99-4ed2-b80d-e": {
+   "sha256": "20cdcfce72577de79f8e008f051cc779ba5d2438a84c36e47f24df371ce88493",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://career.engr.psu.edu/events/index.aspx": {
+   "sha256": "704666556a3f298f9d4f4ef759782d94da049e54d9ef29a60c42dbf159bf3688",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://career.engr.psu.edu/faculty-staff-list.aspx": {
+   "sha256": "4cd92a9bcee1f9ba61fb2539d54aba91c4b47ad76bb2d05e7a88415659289358",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://career.engr.psu.edu/facultystaff/abet.aspx": {
+   "sha256": "08c8b8b888b65eea72b7d0fc825559282a1b765ce727e875b2862350af82cafa",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://career.engr.psu.edu/facultystaff/cpt.aspx": {
+   "sha256": "8d82e9135a271f66dd63f2aed406ebee0a04addb271f0a3f551755ff36a0f3ec",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://career.engr.psu.edu/facultystaff/index.aspx": {
+   "sha256": "f50def811e949de9867fdca22c2cd94adbed4d254ee8333f444a800a5f2a4528",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://career.engr.psu.edu/facultystaff/nlc.aspx": {
+   "sha256": "cd8fd080e7f51672971983b65ea8405b1ba0ac494d998d181ef09423ed33a70e",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://career.engr.psu.edu/facultystaff/reports.aspx": {
+   "sha256": "4bc7b03b5ebe0fefef0979f95bcb8e52ba0fe5048cdc38cafede81fd83b0de97",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://career.engr.psu.edu/index.aspx": {
+   "sha256": "9d4b06a119a209676bb62e6f471b1d8808b3b78e27fd988d49c2117acc6614a1",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://career.engr.psu.edu/students/30-second-introduction.aspx": {
+   "sha256": "83cfe9e427bc677c24b1a4e9df1ae99009d20c81c4ad77cf96a47d4542bd3786",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://career.engr.psu.edu/students/basics/action-verbs.aspx": {
+   "sha256": "3b2f1d2b23ed0b3b86c0636a67d42cd2f679fda193ed6556b79a1cde9863f63e",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://career.engr.psu.edu/students/basics/cover-letter.aspx": {
+   "sha256": "e9a86908629e29eba6bb9ddaee8aeecc8bed49e3326ef6d3a3ccba71668cd3f3",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://career.engr.psu.edu/students/basics/cv.aspx": {
+   "sha256": "d567405a3574de3d763a1a7f4e9a3dbea465f92ec1a312126a616f590e3c90ec",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://career.engr.psu.edu/students/basics/index.aspx": {
+   "sha256": "cf60ed8ddf62576cd25d203451e84baa9a93fff80007ec7fce5040e67bc4715f",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://career.engr.psu.edu/students/basics/references.aspx": {
+   "sha256": "d150a2dcc52fde22117adaa83f305d178ea0ca39be79998b2174a31c22696c98",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://career.engr.psu.edu/students/basics/resume.aspx": {
+   "sha256": "5348ada1fb5ba2ff7b2c1b309caea43f0b763334cbe618564f85633f7f351fce",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://career.engr.psu.edu/students/basics/thank-you.aspx": {
+   "sha256": "b19577d39a74cc3efc1d3a61909b91c19758e71eaa560ebc24d0f7c09d6b9835",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://career.engr.psu.edu/students/career-development-course.aspx": {
+   "sha256": "636a0e900306d22da4634f76c687926be296efb772c389f58adb47a897c3308e",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://career.engr.psu.edu/students/disabilities.aspx": {
+   "sha256": "a1efca61bd63878293c91ac91f709bb04a2598d29a7195128cb3b85652d00b90",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://career.engr.psu.edu/students/dress-for-success.aspx": {
+   "sha256": "33a975a872d2fc6e37f908784d921b9c4871529709c59e522bceac889916d006",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://career.engr.psu.edu/students/envoys.aspx": {
+   "sha256": "9e37e03a84e76d64e05edad860842a0fdf34aad0a961b0b9efc0aebb0a3ed625",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://career.engr.psu.edu/students/grad-professional/business-school.aspx": {
+   "sha256": "4d217839126a8398711e8b88092a86748f30d20941d06ee6d07a21cf5201d42e",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://career.engr.psu.edu/students/grad-professional/grad-school.aspx": {
+   "sha256": "3c2f4ea5844bb969520674c37d4e1f20b9a2148b1d91011cb07465575e99b5c7",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://career.engr.psu.edu/students/grad-professional/index.aspx": {
+   "sha256": "46b6cb5695bd4fc06396e0ab1e85f65b815a42b6e586b24591601398aba8dcf4",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://career.engr.psu.edu/students/grad-professional/med-school.aspx": {
+   "sha256": "fc40f8a1587ec385c6a8af993cca7a34a67e44ec9fe905317025276760a922a2",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://career.engr.psu.edu/students/graduate/index.aspx": {
+   "sha256": "f27cefebe6521c3b78e94ca4330d560049a94059ad138f9ff50014046f705f6c",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://career.engr.psu.edu/students/index.aspx": {
+   "sha256": "6b64cca587657b73df251faf1549b12ed5f611ed21c97b90619b8b9402f976d6",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://career.engr.psu.edu/students/intern-coop/202C.aspx": {
+   "sha256": "453118a984f287c26db5374cbd2347fe3320a7950051381884a52b66c03219d6",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://career.engr.psu.edu/students/intern-coop/checklist.aspx": {
+   "sha256": "126a2c52737386394c7502b7763426c51b57c80af5e2ae62df20a51c4d2b23eb",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://career.engr.psu.edu/students/intern-coop/contacts.aspx": {
+   "sha256": "a41911c81524c08f10d1e0f052ebf09cc6359b172ae9e16c1c86980ee1273ff4",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://career.engr.psu.edu/students/intern-coop/courses.aspx": {
+   "sha256": "9015b175575ba1cbbbc2982b7b6c9badaa5c64695652380eec454c0c737432be",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://career.engr.psu.edu/students/intern-coop/index.aspx": {
+   "sha256": "3a44ba0ef4f737fcf83fc75d78ca4c9d6b411684f4c58020cdada2c07b2479a3",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://career.engr.psu.edu/students/international/cpt.aspx": {
+   "sha256": "c4c1f5239a82476dbe56d4ca1a00716feb9d8ad213a14fb51dbb2a9a7dbdfe8d",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://career.engr.psu.edu/students/international/index.aspx": {
+   "sha256": "7f0ff3b93441689966d9eef55da78ddba66add55863a3e51c98caa04b977a787",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://career.engr.psu.edu/students/international/pre-completion-opt.aspx": {
+   "sha256": "64a9cfc4caab6987a0410379e085ba2f5d68cd3d5334844aa112cbe9bcb0ab8e",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://career.engr.psu.edu/students/interviewing/index.aspx": {
+   "sha256": "34e2b7b17c17460b552ebf5104d4d7ef798bf08e8c47abdff0a39f828c7cfaad",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://career.engr.psu.edu/students/interviewing/on-campus.aspx": {
+   "sha256": "1b8215049e9e1ff207005349252882c0f106ddd7d877d1cb92cf9aa158054d19",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://career.engr.psu.edu/students/interviewing/on-site.aspx": {
+   "sha256": "ac0f63748242974d09c9c01806d1bf4e795738cbc52b8951f01d1fbf1e492a6f",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://career.engr.psu.edu/students/interviewing/questions-answers.aspx": {
+   "sha256": "5ce735133121607c5bd3e37c7bfddc246ad06ad4f6d1a3e533df9b8a61a04496",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://career.engr.psu.edu/students/interviewing/types.aspx": {
+   "sha256": "5621ca63966d2e96a77593ceea7a5883ad03f4cbbc69310d9747a6639ac7ea58",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://career.engr.psu.edu/students/job-search.aspx": {
+   "sha256": "528c829e1a25f07a5d682164c3c07d7f4ea2db979e21b9371c2a1af8779100fa",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://career.engr.psu.edu/students/networking.aspx": {
+   "sha256": "4a37ee2504bcc6f9c9e23f11653e00d8f1cd3c6409fe87817bf4ff0af3ee596f",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://career.engr.psu.edu/students/offers.aspx": {
+   "sha256": "66f2e31406354f0a8ea75b20ba3ec1b2ccb37168d5b1b21f45b050a1dc77ec30",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://career.engr.psu.edu/students/salary.aspx": {
+   "sha256": "31ec15bff81628ba221133c16586d4303532bf85fa45a0e319094a20d4c59f64",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://career.engr.psu.edu/students/timelines/graduate.aspx": {
+   "sha256": "a9fd4759c14f2f1834996e27cba30c0504c45efdb661b1bfffce58e6b63548cb",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://career.engr.psu.edu/students/timelines/index.aspx": {
+   "sha256": "c2de76fa8f536b477c789abbe0342f1895b0da208bc9fcee98120fefb7682660",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://career.engr.psu.edu/students/timelines/undergraduate.aspx": {
+   "sha256": "8d6a0f7223ee3798124b1fcd269f96e81da82096b8ceebe40834abb423cba717",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://career.engr.psu.edu/students/types-of-events.aspx": {
+   "sha256": "4d6d2c1beabd8ec11ffc9d8e107a095b3e6da7450ecdf806fb15519ff36e52e7",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://career.engr.psu.edu/students/undergraduate/index.aspx": {
+   "sha256": "efdacfbd3980641f5c797501f0579928d88a4e9065efa7688acef2c8d196438a",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://lf.psu.edu/forms-legal-statements/": {
+   "sha256": "0b5b859875d866778661b0868af66f6c6c970d71348aa77c5468836d0c38b6bb",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://lf.psu.edu/sponsors/sponsor-a-project/": {
+   "sha256": "69310eaa8858e3cd031aa0fdae1d3ce2b7728037fc1a355027542fc799601efb",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://lf.psu.edu/sponsors/sponsor-agreements/": {
+   "sha256": "5c039b4d56941e032cfab6f493bbf54aefac7dd922e83f80a9f202cd9f083385",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://www.engr.psu.edu": {
+   "sha256": "4ed030e5f1037f62ef7234c4845b20d35f5b29c0741a5714d60207ce68953caf",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://www.engr.psu.edu/academics/index.aspx": {
+   "sha256": "e80343b24301f156a43d734778e913ea182cb03d6468662510eeb9586eba1ceb",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://www.engr.psu.edu/academics/organizations.aspx": {
+   "sha256": "6f8acc8136ad3b27faafe9f7576d5e80725cdc4dcf81ec234eaf099777cef07e",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://www.engr.psu.edu/alumni/index.aspx": {
+   "sha256": "f4b6762ffe8aed968cf9fb49a27679c6dca101bf906dcef1459205d7f65841b3",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://www.engr.psu.edu/communications/archive/index-23.aspx": {
+   "sha256": "f703e82af395c75321cc096e95fb79ebf29c5f31121929212af1109852aba24b",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://www.engr.psu.edu/directory/index.aspx": {
+   "sha256": "a3b9fec43fd6a91001a3da1386ed07a3f4fd76afaceec8bcd02bb8c6fce36d0d",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://www.engr.psu.edu/finance-office/index.aspx": {
+   "sha256": "d1127edcae495d73e35d8d0ebf97c34a15e68bdf12e30b06cc1fd729f8907682",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://www.engr.psu.edu/giving/index.aspx": {
+   "sha256": "7f01bb9c39b7aa94c2e339ba6215677bbcdd0cd46aba90d23ad13d30be2ab06a",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://www.engr.psu.edu/giving/staff.aspx": {
+   "sha256": "1327d53bdff948dc905e57fa3c0f483ee72fd0a2fce0966331fbc5cfccc67f27",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://www.engr.psu.edu/hr-office/index.aspx": {
+   "sha256": "efc5a7c5bc7c8baf070a518b2db0a90506ec1d9a520a06942d52234382933e46",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://www.engr.psu.edu/ip-policies/index.aspx": {
+   "sha256": "3eeeeba9ea8ceb095433225497e4f18a8778329bed4ffb138e5b975c5071f918",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://www.engr.psu.edu/ipac/index.aspx": {
+   "sha256": "4e7915bbcdd0755c811403692e3c4ac1ae40afd4569fa2b7b40273a22e6c5d79",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://www.engr.psu.edu/partnership-opportunities/continuing-ed.aspx": {
+   "sha256": "d3db3844b0eb87f662a1c98674985e0b67f9857259e96b0391b6c79f456bdb6d",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://www.engr.psu.edu/partnership-opportunities/ed-opportunities.aspx": {
+   "sha256": "b865bee54a68fb0616a6e95cfb77e8771da570ff32d077181a678d1bc4804bb3",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://www.engr.psu.edu/partnership-opportunities/index.aspx": {
+   "sha256": "8ab756dc5fa53b27c6608fe2b85392ca298d93155376d90d4ae58eaeb921c8b0",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://www.engr.psu.edu/partnership-opportunities/sponsorships.aspx": {
+   "sha256": "535593130479d751e11580d635a7d4431a43b1e1578363dd62718d7fddfbc851",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://www.engr.psu.edu/research/centers-labs.aspx": {
+   "sha256": "34a5916294b764aadb5aee332bcf7ccb3c7ba348793eefd45fcfb00e23c14f7c",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://www.engr.psu.edu/research/index.aspx": {
+   "sha256": "62c1f25a691d992ccbfcbdaf7db4e3c56d92364efe929492474f096a4b0eb357",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://www.engr.psu.edu/research/institutes.aspx": {
+   "sha256": "81a87a742eae76349d874cfef965e84b8c9a3ba60546dd0079c4628e6a1f32c4",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://www.engr.psu.edu/research/interdisciplinary.aspx": {
+   "sha256": "6a9acf716a9976d2084f3fbf86f7260e7f51b2ff346f58e3881210a8c669ec5e",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://www.engr.psu.edu/research/undergrad-opportunities.aspx": {
+   "sha256": "136d0471cfaf4d38d1f17c5bb129d30cb272b0254cf95c7a3a294eb774028d84",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://www.me.psu.edu": {
+   "sha256": "11675a00aa6f0f9483c264f36e2b7426875cb29479d0ec689130cdf31b4fc43d",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://www.me.psu.edu/department/faculty-staff-list.aspx": {
+   "sha256": "fa2f58b8848fc8857b668abdd24c123ad7708eed61e93be668ffcac740fbce97",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://www.me.psu.edu/industry/index.aspx": {
+   "sha256": "f86b21a231e74855e1363b3a2419b28e7065f6331d6c9b3310d0daba096308a7",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://www.me.psu.edu/research/index.aspx": {
+   "sha256": "39f8a76c5885512dfedd50812a89dcc3594443ac097dc51fd8633cfdc14617b6",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  },
+  "https://www.me.psu.edu/research/supergroups/bioinspired-multifunctional-materials-systems-structures.aspx": {
+   "sha256": "a02b242a99e50004444b453d00de776ff3cebb25be5f371e1c8d54a120120e3e",
+   "last_checked": "2026-10-22T17:19:35+00:00",
+   "status": "baseline",
+   "last_changed": "2026-10-22T17:19:35+00:00"
+  }
+ }
+}
