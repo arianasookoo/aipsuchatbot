@@ -17,6 +17,16 @@ import time
 import urllib.error
 import urllib.request
 
+from pathlib import Path
+
+# Optional .env next to this file (see .env.example). Real environment variables win.
+_env = Path(__file__).with_name(".env")
+if _env.exists():
+    for _line in _env.read_text(encoding="utf8").splitlines():
+        if _line.strip() and not _line.lstrip().startswith("#") and "=" in _line:
+            _k, _, _v = _line.partition("=")
+            os.environ.setdefault(_k.strip(), _v.strip().strip("\"'"))
+
 BASE = os.environ.get("NAVIGATOR_LLM_BASE", "https://integrate.api.nvidia.com/v1").rstrip("/")
 KEY = os.environ.get("NAVIGATOR_LLM_KEY") or os.environ.get("NVIDIA_API_KEY", "")
 # kimi-k3 answered in ~3 s on 2026-10-14; deepseek-v4.1-flash hung, kimi-k2.6 and the nemotron ids 404'd.

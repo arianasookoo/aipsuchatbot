@@ -194,6 +194,10 @@ python -m pip install chromadb==1.5.9
 
 The embedding model downloads automatically during the first indexing run.
 
+### Setup script (does all of the above plus the chat server)
+
+`.\setup.ps1` on Windows or `bash setup.sh` on macOS/Linux creates the venv, installs the dependency, builds the index once, copies `.env.example` to `.env`, and picks an answer model: `gemma3:12b` through Ollama if you have an NVIDIA GPU or Apple silicon, `gemma3:4b` on CPU, or the free hosted NVIDIA endpoint if Ollama is not installed. Then `python serve.py` and open `http://localhost:8008/app.html`. Safe to re-run.
+
 ## Build the local retrieval pipeline
 
 The committed `chunks.json` is ready to index. Run this command from the
