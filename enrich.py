@@ -47,7 +47,7 @@ CACHE = Path("enrichment_cache.json")
 
 def unit_for(url):
     p = urlparse(url)
-    return next(u for h, pre, u in UNITS if p.netloc == h and p.path.startswith(pre))
+    return next((u for h, pre, u in UNITS if p.netloc == h and p.path.startswith(pre)), "College of Engineering")
 
 
 def contacts_for(content):

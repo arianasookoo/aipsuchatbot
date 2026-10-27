@@ -84,3 +84,8 @@ def test_render_answered_lists_sources():
     assert text.splitlines()[2] == "Sources:"
     assert "[1] Sponsor a Project\nhttps://x.psu.edu/sponsor" in text
     assert "[2] Post a Job\nhttps://x.psu.edu/jobs" in text
+
+
+def test_keep_cited_does_not_split_on_abbreviations():
+    assert keep_cited("Contact Dr. Jane Smith at the Learning Factory [1].", 2) == "Contact Dr. Jane Smith at the Learning Factory [1]."
+    assert keep_cited("Ph.D. students may apply [2]. Unsupported claim here.", 2) == "Ph.D. students may apply [2]."

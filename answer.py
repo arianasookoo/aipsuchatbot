@@ -45,7 +45,10 @@ _retrieval_lock = threading.Lock()
 _llm_slots = threading.Semaphore(int(os.environ.get("NAVIGATOR_LLM_CONCURRENCY", "4")))
 
 
-def warm_up(db=Path("vector_db")):
+DB = Path(__file__).with_name("vector_db")  # next to this file, not the current directory
+
+
+def warm_up(db=DB):
     """Load the embedding model once before serving traffic."""
     with _retrieval_lock:
         retrieve("warm up", db, 1)
@@ -69,17 +72,22 @@ def build_prompt(question, evidence):
     return f"Evidence:\n\n" + "\n\n".join(blocks) + f"\n\nQuestion: {question}"
 
 
+# Sentence boundary: end punctuation or a citation bracket, then whitespace, except after the
+# abbreviations this corpus actually uses ("Dr. Parkinson", "Ph.D. students"). eval/claims.py keeps a copy.
+SENT_SPLIT = re.compile(r"(?<!\bDr\.)(?<!\bMr\.)(?<!\bMs\.)(?<!\bMrs\.)(?<!\bProf\.)(?<!\bSt\.)(?<!\bvs\.)(?<!\bNo\.)(?<!\be\.g\.)(?<!\bi\.e\.)(?<!\bPh\.D\.)(?<!\bU\.S\.)(?<=[.!?\]])\s+")
+
+
 def keep_cited(text, n):
     """Keep only sentences that carry at least one citation in 1..n."""
     kept = []
-    for sent in re.split(r"(?<=[.!?\]])\s+", text.strip()):
+    for sent in SENT_SPLIT.split(text.strip()):
         cites = [int(c) for c in re.findall(r"\[(\d+)\]", sent)]
         if cites and all(1 <= c <= n for c in cites):
             kept.append(sent.strip())
     return " ".join(kept)
 
 
-def answer(question, db=Path("vector_db"), top_k=TOP_K, llm=chat, retriever=retrieve):
+def answer(question, db=DB, top_k=TOP_K, llm=chat, retriever=retrieve):
     with _retrieval_lock:
         evidence = retriever(question, db, top_k)
     with _llm_slots:
@@ -137,7 +145,7 @@ def _selfcheck():
 def main():
     p = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     p.add_argument("question", nargs="?")
-    p.add_argument("--db", type=Path, default=Path("vector_db"))
+    p.add_argument("--db", type=Path, default=DB)
     p.add_argument("--json", action="store_true")
     p.add_argument("--selfcheck", action="store_true")
     a = p.parse_args()

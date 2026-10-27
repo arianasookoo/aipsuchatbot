@@ -5,8 +5,8 @@ Run: python refresh.py                 # check, write freshness.json, exit 1 if 
      python refresh.py --rebuild       # on change: re-run scraper -> cleaner -> chunker -> index
      python refresh.py --selfcheck
 
-Exit codes: 0 nothing changed, 1 changed/removed pages (rebuild needed), 2 fetch errors only
-(retry later), 3 precondition (missing input file, or bs4 missing for --rebuild).
+Exit codes: 0 nothing changed (or --rebuild succeeded), 1 changed/removed pages (rebuild needed),
+2 fetch errors only (retry later), 3 precondition (missing input file, or bs4 missing for --rebuild).
 
 Design:
 - Change detection hashes the page text extracted by a standard-library HTML parser using the
@@ -99,13 +99,13 @@ def fetch(url, timeout=20):
                 return 0, "", url
 
 
-def classify(status, final_url, url, new_hash, prev_hash):
+def classify(status, final_url, url, new_hash, prev_hash, prev_final=None):
     if status in (404, 410):
         return "removed"
     if status == 0 or status >= 400:
         return "error"
-    if final_url.rstrip("/") != url.rstrip("/"):
-        return "changed"
+    if final_url.rstrip("/") != url.rstrip("/") and final_url.rstrip("/") != (prev_final or "").rstrip("/"):
+        return "changed"  # a new redirect; one already recorded in the manifest is judged by content
     if prev_hash is None:
         return "baseline"
     return "unchanged" if new_hash == prev_hash else "changed"
@@ -119,7 +119,7 @@ def check(urls, manifest, fetch=fetch, workers=8):
     def one(url):
         status, html, final = fetch(url)
         h = page_hash(extract(html)[1]) if html else prev.get(url, {}).get("sha256")
-        kind = classify(status, final, url, h, prev.get(url, {}).get("sha256"))
+        kind = classify(status, final, url, h, prev.get(url, {}).get("sha256"), prev.get(url, {}).get("final_url"))
         entry = {"sha256": h, "last_checked": now, "status": kind,
                  "last_changed": now if kind in ("changed", "baseline") else prev.get(url, {}).get("last_changed")}
         if final.rstrip("/") != url.rstrip("/"):
@@ -160,10 +160,11 @@ def _selfcheck():
     assert base["u1"]["status"] == "baseline" and base["u4"]["status"] == "removed" and base["u5"]["status"] == "error"
     assert base["u6"]["status"] == "changed" and base["u6"]["final_url"] == "u6/moved"
     prev = {"pages": {u: {**e, "sha256": page_hash("same")} for u, e in base.items()}}
-    again = check(["u1", "u2", "u3"], prev, fetch=fetcher, workers=2)
+    again = check(["u1", "u2", "u3", "u6"], prev, fetch=fetcher, workers=2)
     assert again["u1"]["status"] == "unchanged", again["u1"]
     assert again["u2"]["status"] == "changed"
     assert again["u3"]["status"] == "unchanged"  # nav-only edit does not count
+    assert again["u6"]["status"] == "unchanged"  # a redirect already on record is not a change
     assert extract(page("x")) == ("T", "x")
     print("selfcheck ok")
 
@@ -184,14 +185,15 @@ def main():
     manifest = json.loads(a.manifest.read_text(encoding="utf8")) if a.manifest.exists() else {}
     pages = check(urls, manifest)
     counts = report(pages)
+    stale = counts["changed"] + counts["removed"]
+    rebuilt = bool(stale and a.rebuild)
+    if rebuilt:
+        rebuild()  # raises on failure, so the manifest below is only written once the index matches it
     if not a.dry_run:
         a.manifest.write_text(json.dumps({"checked_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
                                           "pages": pages}, indent=1), encoding="utf8")
         print(f"wrote {a.manifest.name}")
-    stale = counts["changed"] + counts["removed"]
-    if stale and a.rebuild:
-        rebuild()
-    sys.exit(1 if stale else 2 if counts["error"] else 0)
+    sys.exit(0 if rebuilt else 1 if stale else 2 if counts["error"] else 0)
 
 
 if __name__ == "__main__":

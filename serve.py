@@ -7,7 +7,7 @@ POST /ask       {"question": "..."}  ->  answer.py output plus "reply" (plain te
 POST /api/chat  {"message": "..."}   ->  {"reply", "sources": [{title,url}], "passages"}: the shape
                                          index.html / chatbot.js on the team's `testing` branch expect
 GET  /api/health                     ->  {"status": "ok"}
-GET  /...                            ->  static files from this folder (app.html, demo.html, index.html, chatbot.js)
+GET  /                               ->  app.html; only the files in STATIC are served, everything else is 404
 
 Honest limitation: single-threaded dev server, one LLM call per request with no
 caching. The load test in eval/ measures exactly that, which is the point.
@@ -22,7 +22,9 @@ from pathlib import Path
 
 from answer import answer, render, warm_up
 
-LOG = Path("query_log.jsonl")  # every question, answer, latency: feeds the eval set later
+HERE = Path(__file__).parent
+LOG = HERE / "query_log.jsonl"  # every question, answer, latency: feeds the eval set later
+STATIC = {"/app.html", "/demo.html", "/index.html", "/chatbot.js", "/chatbot.css"}  # never .env, .git, logs
 
 
 def chat_reply(out):
@@ -39,8 +41,14 @@ def chat_reply(out):
 
 class Handler(SimpleHTTPRequestHandler):
     def do_GET(self):
-        if self.path.split("?", 1)[0] == "/api/health":
+        path = self.path.split("?", 1)[0]
+        if path == "/api/health":
             return self._json(200, {"status": "ok"})
+        if path == "/":
+            path = "/app.html"
+        if path not in STATIC:
+            return self.send_error(404)
+        self.path = path
         return super().do_GET()
 
     def do_POST(self):
@@ -48,7 +56,7 @@ class Handler(SimpleHTTPRequestHandler):
         if path not in ("/ask", "/api/chat"):
             return self.send_error(404)
         try:
-            body = json.loads(self.rfile.read(int(self.headers.get("Content-Length", 0)) or b"{}"))
+            body = json.loads(self.rfile.read(int(self.headers.get("Content-Length") or 0)) or b"{}")
             q = str(body.get("question") or body.get("message") or "").strip()[:500]
             if not q:
                 raise ValueError("empty question")
@@ -62,7 +70,7 @@ class Handler(SimpleHTTPRequestHandler):
             self._json(200, chat_reply(out) if path == "/api/chat" else out)
         except Exception as e:  # never leak a stack trace to the widget; log it server-side
             print(f"ERROR {path}: {type(e).__name__}: {str(e)[:300]}", file=sys.stderr, flush=True)
-            self._json(500, {"reply": "Sorry, something went wrong on the server.", "error": str(e)[:200]})
+            self._json(500, {"reply": "Sorry, something went wrong on the server."})
 
     def _json(self, status, payload):
         data = json.dumps(payload, ensure_ascii=False).encode()
@@ -83,7 +91,7 @@ def main():
     p.add_argument("--host", default="127.0.0.1", help="0.0.0.0 inside Docker")
     a = p.parse_args()
     warm_up()
-    srv = ThreadingHTTPServer((a.host, a.port), partial(Handler, directory=str(Path(__file__).parent)))
+    srv = ThreadingHTTPServer((a.host, a.port), partial(Handler, directory=str(HERE)))
     print(f"Navigator: http://localhost:{a.port}/app.html   (widget version: /demo.html, Ctrl+C to stop)", flush=True)
     srv.serve_forever()
 

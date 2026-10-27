@@ -40,15 +40,18 @@ Sentences:
 Reply with one line per sentence in the form `<number>: SUPPORTED` or `<number>: UNSUPPORTED`, nothing else."""
 
 
+# Copy of answer.SENT_SPLIT so scoring splits sentences exactly as keep_cited does.
+SENT_SPLIT = re.compile(r"(?<!\bDr\.)(?<!\bMr\.)(?<!\bMs\.)(?<!\bMrs\.)(?<!\bProf\.)(?<!\bSt\.)(?<!\bvs\.)(?<!\bNo\.)(?<!\be\.g\.)(?<!\bi\.e\.)(?<!\bPh\.D\.)(?<!\bU\.S\.)(?<=[.!?\]])\s+")
+
+
 def split_claims(answer):
-    parts = re.split(r"(?<=[.!?\]])\s+", answer.strip())
+    parts = SENT_SPLIT.split(answer.strip())
     return [re.sub(r"\s*\[\d+\]", "", p).strip() for p in parts if len(p.split()) >= 3]
 
 
 def llm_judge(claims, evidence):
     from llm import chat
-    old = os.environ.get("NAVIGATOR_LLM_MODEL")
-    if os.environ.get("NAVIGATOR_JUDGE_MODEL"):
+    if os.environ.get("NAVIGATOR_JUDGE_MODEL"):  # process-wide: claims.py only ever judges
         import llm
         llm.MODEL_PREFIX, llm._model = os.environ["NAVIGATOR_JUDGE_MODEL"], None
     prompt = JUDGE.format(evidence="\n\n".join(f"[{i}] {e}" for i, e in enumerate(evidence, 1)),
