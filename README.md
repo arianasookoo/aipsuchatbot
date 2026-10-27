@@ -2,7 +2,7 @@
 
 This repository contains a proof-of-concept retrieval pipeline and chat interface for the Penn State Engineering Engagement Navigator. The project is intended to help external organizations find official Penn State resources for activities such as recruiting, research partnerships, capstone sponsorship, student organizations, events, giving, and employee education.
 
-The current implementation can clean scraped webpages, create overlapping text chunks, build a local vector index, and retrieve relevant passages with their official source URLs. It does **not** yet generate final chatbot answers.
+The current implementation can clean scraped webpages, create overlapping text chunks, build a local vector index, retrieve relevant passages with their official source URLs, and generate cited answers from that evidence through `serve.py` (see `eval/README.md` for the measured results).
 
 ## Current status
 
@@ -15,7 +15,8 @@ The repository currently includes:
 - A local Chroma vector database using the `all-MiniLM-L6-v2` embedding model.
 - Additional model-aware splitting that produces 577 indexed passages from the 324 source chunks.
 - Semantic vector search and hybrid keyword/semantic retrieval.
-- A standalone browser chat widget whose responses are still placeholders.
+- A grounded answer service (`answer.py`, `serve.py`) that cites official pages and declines when the evidence is insufficient, with a browser front end (`app.html`) and the popout widget (`index.html`).
+- A 40-question labeled evaluation set and scripts under `eval/`, a monthly freshness check (`refresh.py`), and offline tests under `tests/`.
 
 Cleaning reduces the source dataset from 74,524 words to 48,042 words. These figures describe the currently committed generated files.
 
@@ -288,12 +289,11 @@ The job-posting and capstone tests rank the expected pages first. The research t
 - Some joined words and navigation fragments remain after cleaning.
 - Fixed-size chunks can begin or end partway through a sentence.
 - Hybrid search returns at most one passage per document, which can omit related instructions or contact details elsewhere on the same page.
-- The current metadata does not yet include all planned fields, such as engagement category, College unit, contact method, crawl timestamp, retrieval date, and active/stale status.
+- Metadata enrichment (`enrich.py`) adds engagement category, College unit, contact method, and retrieval date; crawl timestamps and active/stale status come from `freshness.json` rather than the chunks themselves.
 - Document IDs are content-derived, so changing a page's content changes its document ID.
 - The local Chroma index is rebuilt rather than incrementally updated.
-- There is not yet a 30-question labeled retrieval evaluation set.
-- There is no answer-generation service, retrieval API, or end-to-end backend.
-- The chat interface still uses placeholder behavior.
+- Answer latency depends on the model host: 2-4 s per answer on a 16 GB GPU with a local model, 3-70 s on the shared hosted endpoint. The p95-at-10-users target is to be measured on the sponsor's DGX Spark.
+- `serve.py` (port 8008) returns cited answers and also serves the widget's `/api/chat`; the `testing` branch adds a passages-only `server.py` on port 8000. The team will consolidate the two.
 
 ## Suggested next work
 
