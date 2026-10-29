@@ -1,0 +1,17 @@
+# Monthly freshness check (requirement: corpus no older than one month).
+# Red run = pages changed or removed since the committed freshness.json; re-run
+# `python refresh.py --rebuild` locally and commit the new index inputs.
+name: corpus-freshness
+on:
+  schedule:
+    - cron: "0 9 1 * *"
+  workflow_dispatch:
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python refresh.py --dry-run

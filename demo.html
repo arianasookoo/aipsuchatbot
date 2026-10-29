@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Engineering Engagement Navigator - demo</title>
+<link rel="stylesheet" href="chatbot.css">
+<style>
+  body { margin: 0; font-family: system-ui, sans-serif; color: #0b1f3f; background: #fff; }
+  main { max-width: 760px; margin: 0 auto; padding: 56px 24px; }
+  h1 { font-size: 26px; margin: 0 0 12px; }
+  p, li { font-size: 15px; line-height: 22px; color: #55627a; }
+  .cb-msg { white-space: pre-wrap; }       /* keep the Sources: lines on their own lines */
+  code { background: #f1f4f9; padding: 1px 5px; border-radius: 4px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Penn State Engineering Engagement Navigator</h1>
+  <p>Ask how an outside organization can recruit, sponsor a capstone, partner on research, give, or train employees with the College of Engineering. Every sentence in an answer cites an official page. If the official pages do not support an answer, the assistant says so and points to the closest page instead.</p>
+  <ul>
+    <li>Backend: <code>POST /ask</code> from <code>serve.py</code>, evidence from <code>hybrid_search.py</code>, wording from the model named in <code>llm.py</code>.</li>
+    <li>Quality numbers: <code>eval/README.md</code>.</li>
+  </ul>
+</main>
+<script src="chatbot.js"></script>
+<script>
+  ChatbotPopout.init({
+    title: 'Engagement Navigator',
+    status: 'Cites official Penn State pages',
+    greeting: 'Hi! Ask me how your organization can work with Penn State Engineering.',
+    suggestions: [
+      'How can my company sponsor a capstone project?',
+      'How do I post a job for engineering students?',
+      'Who do I contact about a research partnership?'
+    ],
+    startOpen: true,
+    note: 'Prototype. Answers are limited to the public pages that have been indexed.',
+    onMessage: async function (text) {
+      var r = await fetch('/ask', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({ question: text }) });
+      var data = await r.json();
+      return data.reply || 'Sorry, something went wrong.';
+    }
+  });
+</script>
+</body>
+</html>
