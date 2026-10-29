@@ -89,3 +89,11 @@ def test_render_answered_lists_sources():
 def test_keep_cited_does_not_split_on_abbreviations():
     assert keep_cited("Contact Dr. Jane Smith at the Learning Factory [1].", 2) == "Contact Dr. Jane Smith at the Learning Factory [1]."
     assert keep_cited("Ph.D. students may apply [2]. Unsupported claim here.", 2) == "Ph.D. students may apply [2]."
+
+
+def test_far_evidence_is_refused_without_a_model_call():
+    far = [{**EVIDENCE[0], "cosine_similarity": 0.2, "keyword_rank": 9, "vector_rank": 9}]
+    calls = []
+    out = answer.answer("football tickets", llm=lambda m: calls.append(m) or "Made up [1].", retriever=lambda q, db, k: far)
+    assert out["refused"] and not calls
+    assert out["fallback"]["url"] == "https://career.engr.psu.edu/connect.aspx"

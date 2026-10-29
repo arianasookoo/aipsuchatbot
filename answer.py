@@ -43,6 +43,13 @@ _retrieval_lock = threading.Lock()
 # The free NVIDIA endpoint returns 429 at ~10 simultaneous long prompts (measured 2026-10-14):
 # cap in-flight model calls so extra users queue instead of getting an error.
 _llm_slots = threading.Semaphore(int(os.environ.get("NAVIGATOR_LLM_CONCURRENCY", "4")))
+# Refuse before calling the model when even the best passage is far from the question. Measured
+# 2026-10-29 over eval/queries.jsonl: every in-scope question's best passage scores >= 0.51 cosine,
+# "football tickets" 0.25, "dean's home address" 0.45; two of the five out-of-scope questions score
+# above 0.5 and are still left to the model's own refusal. The 12B local model answered the football
+# question with citations before this gate existed.
+# ponytail: one global threshold; per-category or a reranker if in-scope refusals show up in claims.csv.
+MIN_SIMILARITY = float(os.environ.get("NAVIGATOR_MIN_SIMILARITY", "0.45"))
 
 
 DB = Path(__file__).with_name("vector_db")  # next to this file, not the current directory
@@ -90,9 +97,12 @@ def keep_cited(text, n):
 def answer(question, db=DB, top_k=TOP_K, llm=chat, retriever=retrieve):
     with _retrieval_lock:
         evidence = retriever(question, db, top_k)
-    with _llm_slots:
-        reply = llm([{"role": "system", "content": SYSTEM},
-                     {"role": "user", "content": build_prompt(question, evidence)}])
+    if not evidence or max(e.get("cosine_similarity", 1.0) for e in evidence) < MIN_SIMILARITY:
+        reply = REFUSAL  # nothing close enough to be worth a model call
+    else:
+        with _llm_slots:
+            reply = llm([{"role": "system", "content": SYSTEM},
+                         {"role": "user", "content": build_prompt(question, evidence)}])
     reply = re.sub(r"^\s*ANSWERABLE\s*", "", reply)  # decision line, see SYSTEM rule 6
     cited_text = "" if REFUSAL in reply[:40] else keep_cited(reply, len(evidence))
     used = sorted({int(c) for c in re.findall(r"\[(\d+)\]", cited_text)})
